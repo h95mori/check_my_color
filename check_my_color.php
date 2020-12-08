@@ -8,8 +8,26 @@
  Author URI: https://color.toshidayurika.com
  License: GPLv2 or later
  Text Domain: contraction
- 
+a b
 */
+
+//add_action ('wp_loaded', 'my_custom_redirect');
+function my_custom_redirect() {
+	var_dump('test0');
+	if (!is_page('diagnosis')){
+		var_dump('test1');
+		return;
+	}
+
+	var_dump('test2');
+	if (($_SESSION["ct"]) == 5){
+		var_dump('test3');
+		wp_redirect( 'http://192.168.0.62:8080/dia-result' );
+		return;
+	}
+}     
+
+
 
 add_action('init', 'color_session_start');
 function color_session_start(){
@@ -21,6 +39,10 @@ function color_session_start(){
 //	var_dump($atts['yes_no']);
 //	error_log('test3');
 function simple_check_my_color( $content ) {
+
+	if (!is_page('diagnosis')){
+		return $content;  
+	}
 
 	/*
 	$wp_session["ct"] = 1;
@@ -34,17 +56,21 @@ function simple_check_my_color( $content ) {
 		$_SESSION["ret"] = '';
 		return $content;  
 	}
-	if (($_SESSION["ct"])>5){
+	if (!isset($_GET['id']))  {
 		$_SESSION["ct"] = 1;
 		$_SESSION["ret"] = '';
 		return $content;  
 	}
+	if (($_SESSION["ct"])==4){
+		$content = str_replace('diagnosis/?id=0', 'dia-result',$content);
+		$content = str_replace('diagnosis/?id=1', 'dia-result',$content);
+	}
 
-	$before_str = "setsumei1" ;
+	$before_str = "diagnosis_01" ;
 
 	$_SESSION["ct"] = $_SESSION["ct"] + 1;
 
-	$after_str  = "setsumei" . $_SESSION["ct"];
+	$after_str  = "diagnosis_0" . $_SESSION["ct"];
 
 	$_SESSION["ret"] = $_SESSION["ret"] . $_GET['id'];
 	var_dump($_SESSION["ret"]);
