@@ -8,7 +8,7 @@
  Author URI: https://color.toshidayurika.com
  License: GPLv2 or later
  Text Domain: contraction
-a b
+ 
 */
 
 //add_action ('wp_loaded', 'my_custom_redirect');
